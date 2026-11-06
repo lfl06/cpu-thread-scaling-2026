@@ -1,0 +1,54 @@
+POOL LIFECYCLE COMPARISON
+
+Run with the original benchmark's Python interpreter:
+  python pool_comparison.py
+
+Run while connected to power, with the same power mode and minimal background
+activity. Record power settings and any unavoidable interruptions in a note.
+Do not run the original benchmark or other CPU-heavy programs simultaneously.
+
+Design:
+  128 tasks per batch; PBKDF2-HMAC-SHA256.
+  Iterations: 1,000 / 10,000 / 100,000.
+  Workers: 1 / 2 / 4 / 8 / 16.
+  Nine pairs for every configuration, with 135 globally shuffled pairs.
+  Within each pair, the order of the two methods is randomized (seed 2026).
+  270 measured batches in total, plus untimed validation and warm-up work.
+
+fresh:
+  A new ThreadPoolExecutor is created on each measurement. Time includes its
+  creation, task preparation/submission, execution, collection and shutdown,
+  matching the original timing boundary.
+
+prewarmed:
+  A separate executor is created for each measurement outside timing. A barrier
+  ensures all workers exist. A 128-task, 1,000-iteration batch warms the pool.
+  Time includes the same task preparation/submission, execution and collection,
+  but excludes pool initialization, warm-up and shutdown. This is a prewarmed
+  single-batch measurement; it does not model long-term pool reuse.
+
+Both methods use the same inputs. A startup known-answer test is performed.
+Full task outputs are checked after both measurements against serial reference
+outputs from the same PBKDF2 implementation. This is not an independent
+implementation check. Serial references and five initial fresh-pool warm-ups
+are also outside timing.
+
+Interpretation:
+  The comparison estimates the observed difference between two execution
+  strategies. It changes timing boundaries AND worker warm state. The difference
+  is not an isolated measurement of pool creation cost or a causal explanation
+  of P-core/E-core scheduling. No affinity, thermal, frequency or power controls
+  are imposed by the script. Adjacent pairing and random order reduce some
+  order-related bias but do not eliminate carryover or uncontrolled system noise.
+  The original globally randomized 135-run dataset remains a separate study.
+
+Outputs:
+  Each invocation creates a unique folder inside pool_comparison_runs.
+  timings.csv: raw timings, paired identifiers, execution order and verification.
+  metadata.json: runtime versions, GIL status, OS, design and completion status.
+  pool_comparison.py: exact copy of the executed code, with hash in metadata.
+  Original benchmark.py and results.csv are never overwritten.
+
+An optional four-run check uses --smoke and is labeled SMOKE. It must not be
+included as research data. Normal completion should report 270 measured runs
+and status 'complete' in metadata.json. Keep the entire output folder.

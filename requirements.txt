@@ -1,0 +1,2 @@
+# No pip dependencies. Benchmarks and analysis use the Python standard library.
+# Recorded runtime: CPython 3.14.7 with OpenSSL 3.5.7.
