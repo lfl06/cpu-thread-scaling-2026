@@ -8,9 +8,9 @@ https://www.rfc-editor.org/rfc/rfc8018.html
 
 Claim and source type: Informational RFC; PBKDF2 inputs and iterative construction.
 
-[2] Python Software Foundation, CPython v3.14.7, Modules/_hashopenssl.c, pbkdf2_hmac_impl, lines 1296-1301, 2026.
+[2] Python Software Foundation, CPython v3.14.7, Modules/_hashopenssl.c, pbkdf2_hmac_impl, lines 1387-1392, 2026.
 
-https://github.com/python/cpython/blob/v3.14.7/Modules/_hashopenssl.c#L1296-L1301
+https://github.com/python/cpython/blob/v3.14.7/Modules/_hashopenssl.c#L1387-L1392
 
 Claim and source type: Version-pinned source; OpenSSL call inside allow-threads region.
 
