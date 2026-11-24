@@ -78,14 +78,14 @@ def main():
     except ImportError:
         print('\nmatplotlib not installed; figure skipped.')
         return
-    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 8.5,
+    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 10,
                          'axes.spines.top': False, 'axes.spines.right': False})
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.2, 2.9), gridspec_kw={'width_ratios': [1.35, 1]})
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.2, 3.7), gridspec_kw={'width_ratios': [1.35, 1]})
     colors = {1000: '#7FB3C8', 10000: '#2E7D9A', 100000: '#0B2545'}
     for it in (1000, 10000, 100000):
         xs = [r['idx'] for r in orig if r['it'] == it]
         ys = [r['ratio'] for r in orig if r['it'] == it]
-        ax1.scatter(xs, ys, s=11, color=colors[it], label=f'{it:,} it.', zorder=3, linewidths=0)
+        ax1.scatter(xs, ys, s=18, color=colors[it], label=f'{it:,} it.', zorder=3, linewidths=0)
     ax1.axvline(SPLIT + 0.5, color='#C0504D', lw=0.9, ls='--')
     ax1.axhline(1, color='#888', lw=0.6)
     ax1.set_yscale('log')
@@ -94,22 +94,22 @@ def main():
     ax1.minorticks_off()
     ax1.set_xlabel('Measurement order in original session')
     ax1.set_ylabel(f'Time / cell median of batches 1–{SPLIT}')
-    ax1.set_title('(a) Original session: shift after batch 119', loc='left', fontsize=8.5)
-    ax1.legend(frameon=False, fontsize=7.5, loc='upper left')
+    ax1.set_title('(a) Original session: shift after batch 119', loc='left', fontsize=10.5)
+    ax1.legend(frameon=False, fontsize=9, loc='upper left')
     labels = ['Original', 'Follow-up 1', 'Follow-up 2']
     for j, w in enumerate((8, 16)):
         for k in range(3):
             v = [r['ms'] for r in allrows if r['it'] == 100000 and r['w'] == w and r['session'] == k]
             x0 = j * 4 + k
             jit = [x0 + ((i * 37) % 11 - 5) * 0.035 for i in range(len(v))]
-            ax2.scatter(jit, v, s=11, color=['#0B2545', '#2E7D9A', '#7FB3C8'][k],
+            ax2.scatter(jit, v, s=18, color=['#0B2545', '#2E7D9A', '#7FB3C8'][k],
                         label=labels[k] if j == 0 else None, zorder=3, linewidths=0)
     ax2.set_xticks([1, 5])
     ax2.set_xticklabels(['8 workers', '16 workers'])
     ax2.set_ylabel('Batch time (ms), 100,000 iterations')
-    ax2.set_ylim(200, 640)
-    ax2.set_title('(b) Two clusters at 16 workers', loc='left', fontsize=8.5)
-    ax2.legend(frameon=False, fontsize=7.5, loc='upper left', ncol=3, handletextpad=0.1, columnspacing=0.8)
+    ax2.set_ylim(200, 660)
+    ax2.set_title('(b) Two clusters at 16 workers', loc='left', fontsize=10.5)
+    ax2.legend(frameon=False, fontsize=9, loc='upper left', ncol=1, handletextpad=0.2)
     fig.tight_layout()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
