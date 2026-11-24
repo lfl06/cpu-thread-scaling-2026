@@ -8,6 +8,8 @@ Author: Mehmet Esad Onel. Single-author student research, 6 November 2026.
 - src/pool_comparison.py: follow-up script.
 - data/session_1/ and data/session_2/: 270 raw measured batches per session, metadata and exact executed source.
 - src/analyze.py: regenerate all summary and paired-summary CSVs without new experiments.
+- src/regime_analysis.py: post hoc analysis of session dependence (manuscript Section 4.4 and Figure 1).
+- src/bootstrap_ci.py: percentile bootstrap 95% intervals for the key comparisons (10,000 resamples, seed 2026).
 - analysis/: generated descriptive summaries. All original observations are retained.
 - METHOD_NOTES.txt: exact follow-up design, timing boundaries and limits.
 - SOURCE_VERIFICATION.md: checked reference metadata and claim-to-source mapping.
@@ -30,6 +32,10 @@ Paired differences are fresh_ms - prewarmed_ms, with pairing by condition and re
 Formatting uses Python float formatting to three decimal places; last-digit rounding at exact decimal
 halfways can differ from decimal-arithmetic rounding. Raw values are always preserved.
 
+Additional analyses (also read-only, no benchmarks executed):
+    python src/regime_analysis.py   (Section 4.4; writes analysis/figure1_regimes.png/.pdf if matplotlib is installed)
+    python src/bootstrap_ci.py      (bootstrap intervals reported in Sections 4.2 and 4.3)
+
 ## Collect new measurements (optional; not needed to reproduce the tables)
 Use the same interpreter, power mode and hardware, close CPU-heavy background programs and record
 conditions and interruptions. Do not run multiple benchmarks concurrently.
@@ -50,13 +56,16 @@ not 18 independently randomized repeats, and are never pooled with the original 
 Fresh includes pool creation and shutdown. Prewarmed excludes them and adds an untimed warm-up. It has
 one measured batch per pool, so this does not estimate isolated creation overhead or long-term reuse.
 No core placement, utilization, temperature, frequency or power telemetry was collected. No significance
-tests or confidence intervals are claimed. See the manuscript for interpretation and validity limits.
+tests are claimed; bootstrap intervals are descriptive and within-session only. The post hoc analysis in
+src/regime_analysis.py was defined after data collection. See the manuscript for interpretation and limits.
 
 ## Submission and disclosure
-ChatGPT/Codex assisted experimental design discussion, follow-up and analysis code, source lookup,
-calculations, drafting and formatting. The author ran the experiments and reported operating conditions.
-The author must review the manuscript, independently check key sources and calculations, and be able to
-defend all claims. No claim of completed independent author verification is made by this package.
+ChatGPT and Codex (OpenAI) assisted with experimental design discussion, follow-up and analysis code,
+source lookup, calculations, drafting and formatting. Claude (Anthropic) performed the post hoc analysis
+(src/regime_analysis.py, src/bootstrap_ci.py), recomputed the reported values from the raw data, checked
+references against their original sources and edited the final manuscript. The author proposed the topic,
+ran the experiments, reported the operating conditions and takes responsibility for the claims.
+The same declaration appears in the manuscript.
 Reviewer-accessible evidence repository:
 https://github.com/lfl06/cpu-thread-scaling-2026
 Use GitHub's Code > Download ZIP to obtain this directory structure, then run src/analyze.py.
